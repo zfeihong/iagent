@@ -11,6 +11,7 @@
 - 构建: `npm run build`
 - 测试: `npm test`
 - CLI: `npm run cli`
+- Web UI: `npm run web`
 
 ### 环境变量
 
@@ -55,8 +56,13 @@ src/
   entrypoints/          # 多端入口
     cli/                #   CLI 命令行工具（已实现）
       index.ts          #   主入口
+    web/                #   Web UI（Lit+Vite）已实现
+      components/       #     Web Components 组件
+        agent-chat.ts   #     聊天组件
+        agent-message.ts#     消息组件
+      index.html        #     入口 HTML
+      main.ts           #     主入口
     macos/              #   macOS 原生应用（SwiftUI）预留
-    web/                #   Web UI（Lit+Vite）预留
 tests/
   *.test.ts
 ```
@@ -76,8 +82,8 @@ tests/
 | 入口类型 | 技术栈 | 适用场景 | 核心特性 | 状态 |
 |---------|--------|---------|---------|------|
 | **CLI** | Node.js | 开发调试、自动化脚本 | 远程 SSH 管理、脚本化操作、管道集成 | **已实现** |
+| Web UI | Lit+Vite | 跨平台访问、远程管理 | 响应式设计、实时状态监控、WebSocket 通信 | **已实现** |
 | macOS | SwiftUI | 日常桌面使用 | 常驻菜单栏、Touch ID 认证、系统通知集成 | 预留 |
-| Web UI | Lit+Vite | 跨平台访问、远程管理 | 响应式设计、实时状态监控 | 预留 |
 
 ### 生命周期管理
 
@@ -114,3 +120,36 @@ tests/
 
 - 不提交密钥/凭证/真实 credentials
 - 敏感配置放 `~/.agent/credentials/`
+
+## Web UI 开发
+
+### 安装依赖
+
+```bash
+cd src/entrypoints/web
+npm install
+```
+
+### 开发模式
+
+```bash
+npm run dev
+```
+
+访问 http://localhost:5173
+
+### 生产构建
+
+```bash
+npm run build
+```
+
+构建产物输出到 `dist/web` 目录。
+
+### 完整项目构建
+
+```bash
+npm run build
+```
+
+会自动构建 Web UI 并输出到 `dist/web`。

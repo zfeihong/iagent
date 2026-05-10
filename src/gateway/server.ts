@@ -17,7 +17,7 @@ export class GatewayServer {
   constructor(config: GatewayConfig, agent: AgentEngine, memory: Memory) {
     this.agent = agent;
     this.memory = memory;
-    this.port = config.port ?? 8080;
+    this.port = config.port ?? 18789;
     this.host = config.host ?? '0.0.0.0';
   }
 
@@ -30,7 +30,12 @@ export class GatewayServer {
         try {
           const message = JSON.parse(data.toString()) as RouterMessage;
           const response = await this.agent.run(message.content, message.userId);
-          ws.send(JSON.stringify(response));
+          ws.send(
+            JSON.stringify({
+              content: response.message.content,
+              reasoning: response.reasoning,
+            })
+          );
         } catch (error) {
           ws.send(JSON.stringify({ error: String(error) }));
         }

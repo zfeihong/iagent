@@ -1,6 +1,8 @@
 import type { AgentEngine, AgentResponse } from './agent/engine.js';
 import type { Memory } from './memory/vector.js';
 import type { GatewayServer } from './gateway/server.js';
+import './llm/index.js';
+import { createProvider } from './llm/provider.js';
 
 export type { AgentEngine, AgentResponse };
 export type { Memory };
@@ -50,6 +52,16 @@ export class AgentFramework {
 
     const agent = new AgentEngine(config.agent, memory);
     this.agent = agent;
+
+    const provider = createProvider({
+      provider: 'deepseek',
+      apiKey: config.agent.apiKey,
+      baseUrl: config.agent.baseUrl,
+      model: config.agent.model,
+      temperature: config.agent.temperature,
+      maxTokens: config.agent.maxTokens,
+    });
+    agent.setLLMAdapter(provider);
 
     const { GatewayServer } = await import('./gateway/server.runtime.js');
     const gateway = new GatewayServer(config.gateway, agent, memory);
